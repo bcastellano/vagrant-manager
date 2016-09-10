@@ -37,7 +37,10 @@ class Vagrant extends EventEmitter {
 
       const items = this.processText(text);
 
+      // emit event with data loaded async
       this.emit('load', items);
+
+      debug(items);
     });
   }
 
@@ -52,11 +55,12 @@ class Vagrant extends EventEmitter {
     // iterate each line to extract info
     const lines = text.split('\n');
     for (let i = 0; i < lines.length; i++) {
+      // look for empty line to stop adding machine configurations
       if (lines[i].trim() == '') {
         break;
       }
 
-      // set header
+      // set header with cols data (only once)
       if (i == 0) {
         let lastName;
         for (const name of lines[i].split(' ')) {
@@ -71,13 +75,15 @@ class Vagrant extends EventEmitter {
         continue;
       }
 
-      // add each line
+      // add each line (except two first)
       if (i > 1) {
         const item = {};
         let start = 0;
         Object.keys(cols).forEach((value) => {
+          // add item col name with line respective data (get positional data)
           item[value] = lines[i].substr(start, cols[value].length).trim();
 
+          // increment offset of line for next parameter
           start += cols[value].length;
         });
 
@@ -85,8 +91,6 @@ class Vagrant extends EventEmitter {
         items.push(item);
       }
     }
-
-    debug(items);
 
     return items;
   }
