@@ -9,10 +9,10 @@ app.on('ready', ()=> {
   debug('app ready');
 
   if (process.platform=='darwin') {
-    app.dock.hide() //Hide the icon in osx dock
+    //app.dock.hide() //Hide the icon in osx dock
   }
 
-  const mainViewPath = path.join('file://', __dirname, '/../views/main.html')
+  const mainViewPath = path.join('file://', __dirname, '/views/main.html')
 
   let win = new BrowserWindow({ width: 400, height: 320 })
 

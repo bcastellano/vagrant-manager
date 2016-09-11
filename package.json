@@ -2,10 +2,11 @@
   "name": "vagrant-manager",
   "version": "1.0.0",
   "description": "App to manage vagrant virtual machines",
-  "main": "src/main.js",
+  "main": "app/main.js",
   "scripts": {
+    "compile": "rm -rf app && gulp compile",
     "start": "node_modules/.bin/electron .",
-    "start-dev": "DEBUG=vagrant* npm start",
+    "start-dev": "npm run compile && DEBUG=vagrant* npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -22,5 +23,13 @@
   "devDependencies": {
     "electron": "^1.3.5",
     "debug": "^2.2.0"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1"
   }
 }
