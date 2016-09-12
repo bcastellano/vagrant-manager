@@ -1,21 +1,31 @@
 'use strict';
 
-const {remote} = require('electron');
-const vagrant = remote.require('../app/vagrant');
-const React = require('react');
-const ReactDom = require('react-dom');
+import {remote} from 'electron';
+import React from 'react';
+import ReactDom from 'react-dom';
+import { Well, Table } from 'react-bootstrap';
+const vagrant = remote.require('./vagrant');
 
 // Subscribe to vagrant event load machines
 vagrant.on('load', (items)=>{
-
   // Render each machine from list
   ReactDom.render(
-    <section>
-      List of vagrant machines:
-      <ul>
-        {items.map((item, key) => <li key={key}>{item.name}</li> )}
-      </ul>
-    </section>,
+    <Well bsSize="large">
+      <Table responsive hover>
+        <thead>
+          <tr>
+            {Object.keys(items[0]).map((item, key) => <th key={key}>{item}</th> )}
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item, key) =>
+            <tr key={key}>
+              {Object.keys(item).map((key, index) => <td key={index}>{item[key]}</td> )}
+            </tr>
+          )}
+        </tbody>
+      </Table>
+    </Well>,
     document.getElementById('content'),
   );
 
