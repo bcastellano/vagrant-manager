@@ -17,7 +17,7 @@ app.on('ready', ()=> {
   let win = new BrowserWindow({ width: 400, height: 320 })
 
   // debug
-  win.setSize(1000,600)
+  win.setSize(1300,1000)
   win.webContents.openDevTools()
   win.show()
 
