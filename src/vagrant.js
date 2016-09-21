@@ -3,6 +3,7 @@
 const debug = require('debug')('vagrant-manager:vagrant');
 const EventEmitter = require('events');
 const spawn = require('child_process').spawn;
+import shell from 'shelljs';
 
 /**
  * Vagrant class to get vagrant information
@@ -11,15 +12,100 @@ class Vagrant extends EventEmitter {
 
   constructor(){
     super();
+
+    /**
+     * List of machines
+     * Each machine has attrs:
+     *  - id
+     *  - name
+     *  - provider
+     *  - state
+     *  - directory
+     */
+    this._machines = [];
+
     this.loadMachines();
   }
 
   /**
+   *
+   * @param state
+   * @returns {*}
+   */
+  colorFromState(state) {
+
+    // primary, info
+    const colors = {
+      poweroff: 'default',
+      stopped: 'danger',
+      running: 'success',
+      saved: 'warning'
+    };
+
+    return colors[state];
+  }
+
+  /**
+   * Return list of machines. Only work once load event is emitted
+   * @returns {object|null}
+   */
+  getMachine(id) {
+    for (const machine of this._machines) {
+      if (machine.id == id) {
+        return machine;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   *
+   * @param cmd
+   * @param machineId
+   * @returns {*}
+   */
+  exec(cmd, machineId) {
+    switch (cmd) {
+      case 'up':
+        return this.up(machineId);
+
+      // TODO add rest of commands
+
+      default:
+        debug('Vagrant command not found: ' + cmd);
+    }
+  }
+
+  /**
+   *
+   * @param machineId
+   */
+  // TODO print this output in external window or console div
+  up(machineId) {
+    const machine = this.getMachine(machineId);
+
+    shell.cd(machine.directory);
+    shell.exec('vagrant up', function(code, stdout, stderr) {
+       console.log('Exit code:', code);
+       console.log('Program output:', stdout);
+       console.log('Program stderr:', stderr);
+    });
+  }
+
+  // TODO create rest of commands
+
+  /**
    * Load vagrant machines generated
    */
-  loadMachines() {
-    const cmd = spawn('vagrant', ['global-status']);
+  loadMachines(removeCache) {
     let text = '';
+    let args = ['global-status'];
+    if (removeCache == true) {
+      args.push('--prune');
+    }
+
+    const cmd = spawn('vagrant', args);
 
     // get data from command
     cmd.stdout.on('data', (data) => {
@@ -35,7 +121,10 @@ class Vagrant extends EventEmitter {
     cmd.on('close', (code) => {
       console.log(`child process exited with code ${code}`);
 
-      const items = this.processText(text);
+      const items = this.processGlobalStatus(text);
+
+      // save list
+      this._machines = items;
 
       // emit event with data loaded async
       this.emit('load', items);
@@ -44,11 +133,13 @@ class Vagrant extends EventEmitter {
     });
   }
 
+
+
   /**
-   *
+   * Process vagrant global-status text result
    * @param text
    */
-  processText(text) {
+  processGlobalStatus(text) {
     const items = [];
     const cols = {};
 
