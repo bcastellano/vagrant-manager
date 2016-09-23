@@ -105,31 +105,38 @@ class Vagrant extends EventEmitter {
       args.push('--prune');
     }
 
-    const cmd = spawn('vagrant', args);
+    // create promise to return data at finish
+    return new Promise((resolve, reject)=>{
+      const cmd = spawn('vagrant', args);
 
-    // get data from command
-    cmd.stdout.on('data', (data) => {
-      text = `${text}${data}`;
-    });
+      // get data from command
+      cmd.stdout.on('data', (data) => {
+        text = `${text}${data}`;
+      });
 
-    // on error
-    cmd.stderr.on('data', (data) => {
-      console.log(`stderr: ${data}`);
-    });
+      // on error
+      cmd.stderr.on('data', (data) => {
+        console.log(`stderr: ${data}`);
 
-    // command finish
-    cmd.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
+        reject(data);
+      });
 
-      const items = this.processGlobalStatus(text);
+      // command finish
+      cmd.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
 
-      // save list
-      this._machines = items;
+        const items = this.processGlobalStatus(text);
 
-      // emit event with data loaded async
-      this.emit('load', items);
+        // save list
+        this._machines = items;
 
-      debug(items);
+        // emit event with data loaded async
+        this.emit('load', items);
+
+        resolve(items);
+
+        debug(items);
+      });
     });
   }
 

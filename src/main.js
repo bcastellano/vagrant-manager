@@ -14,7 +14,7 @@ app.on('ready', ()=> {
 
   const mainViewPath = path.join('file://', __dirname, '/views/main.html')
 
-  let win = new BrowserWindow({ width: 400, height: 320 })
+  let win = new BrowserWindow({ width: 1300, height: 1000 })
 
   // debug
   win.setSize(1300,1000)

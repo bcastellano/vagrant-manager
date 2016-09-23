@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { SplitButton, MenuItem, Glyphicon } from 'react-bootstrap';
+import { SplitButton, MenuItem, Glyphicon, Button } from 'react-bootstrap';
 const vagrant = require('electron').remote.require('./vagrant');
 
 /**
@@ -21,8 +21,6 @@ class ActionsButton extends React.Component {
       suspend:    { name: 'suspend', icon: 'pause' },
       halt:       { name: 'halt', icon: 'stop' },
     }
-
-    this.executeAction = this.executeAction.bind(this)
   }
 
   /**
@@ -97,5 +95,66 @@ ActionsButton.propTypes = {
   machineId: React.PropTypes.string.isRequired
 }
 
+/**
+ * Button to do something and show busy state
+ */
+class LoadingButton extends React.Component {
+  constructor() {
+    super();
 
-export { ActionsButton }
+    this.state = {
+      isLoading: false
+    }
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  render() {
+    let isLoading = this.state.isLoading;
+    return (
+      <Button
+        bsStyle="primary"
+        disabled={isLoading}
+        onClick={!isLoading ? this.handleClick : null}>
+        {isLoading ? this.props.textLoading : this.props.text}
+      </Button>
+    );
+  }
+
+  handleClick() {
+    this.setState({isLoading: true});
+
+    const promise = this.props.onClick();
+
+    promise
+      .then((value)=>{
+        this.setState({isLoading: false});
+      })
+      .catch((err)=>{
+        console.log(err);
+        this.setState({isLoading: false});
+      });
+  }
+}
+
+/**
+ * Define component properties
+ * @type {{state: *}}
+ */
+LoadingButton.propTypes = {
+  text: React.PropTypes.string,
+  textLoading: React.PropTypes.string,
+  onClick: React.PropTypes.func.isRequired
+}
+
+/**
+ * Define default values for not required properties
+ * @type {{text: string, textLoading: XML}}
+ */
+LoadingButton.defaultProps = {
+  text: 'actualizar',
+  textLoading: <span>actualizando <Glyphicon glyph="refresh" /></span>,
+};
+
+
+export { ActionsButton, LoadingButton }

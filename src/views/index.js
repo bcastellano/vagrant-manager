@@ -4,7 +4,7 @@ import {remote} from 'electron';
 import React from 'react';
 import ReactDom from 'react-dom';
 import { Well, Table, Label } from 'react-bootstrap';
-import { ActionsButton } from './react-components'
+import { ActionsButton, LoadingButton } from './react-components'
 const vagrant = remote.require('./vagrant');
 
 // Subscribe to vagrant event load machines
@@ -12,6 +12,7 @@ vagrant.on('load', (items)=>{
   // Render each machine from list
   ReactDom.render(
     <Well bsSize="large">
+      <LoadingButton onClick={()=>vagrant.loadMachines(true)} />
       <Table responsive hover>
         <thead>
           <tr>
