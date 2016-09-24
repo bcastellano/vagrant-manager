@@ -32,37 +32,29 @@ class ActionsButton extends React.Component {
     const buttons = [];
 
     switch (state) {
-      case 'stopped':
-        buttons.push(this._btn.up);
-        buttons.push(this._btn.destroy);
-        buttons.push(this._btn.provision);
-        break;
       case 'running':
-        buttons.push(this._btn.ssh);
-        buttons.push(this._btn.suspend);
-        buttons.push(this._btn.halt);
-        buttons.push(this._btn.destroy);
-        buttons.push(this._btn.provision);
+        buttons.push(this._btn.ssh, this._btn.suspend, this._btn.halt, this._btn.destroy, this._btn.provision);
         break;
+      case 'stopped':
       case 'poweroff':
-        buttons.push(this._btn.up);
-        buttons.push(this._btn.destroy);
-        buttons.push(this._btn.provision);
-        break;
       case 'saved':
       default:
-        buttons.push(this._btn.up);
-        buttons.push(this._btn.destroy);
-        buttons.push(this._btn.provision);
+        buttons.push(this._btn.up, this._btn.destroy, this._btn.provision);
         break;
     }
 
     return buttons;
   }
 
+  /**
+   * Execute vagran command
+   * @param cmd
+   */
   executeAction(cmd) {
-    const result = vagrant.exec(cmd, this.props.machineId);
-    console.log(result);
+    if (cmd != 'destroy' || confirm('¿Seguro que quieres destuir la máquina?')) {
+      const result = vagrant.exec(cmd, this.props.machineId);
+      console.log(result);
+    }
   }
 
   /**

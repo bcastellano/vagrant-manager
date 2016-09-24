@@ -24,6 +24,9 @@ class Vagrant extends EventEmitter {
      */
     this._machines = [];
 
+    // TODO Abrir ssh en terminal real. Pasar parametros de no confirmacion para destroy
+    this._commands = ['up', 'suspend', 'halt', /*'ssh', 'destroy',*/ 'provision'];
+
     this.loadMachines();
   }
 
@@ -66,34 +69,43 @@ class Vagrant extends EventEmitter {
    * @returns {*}
    */
   exec(cmd, machineId) {
-    switch (cmd) {
-      case 'up':
-        return this.up(machineId);
-
-      // TODO add rest of commands
-
-      default:
-        debug('Vagrant command not found: ' + cmd);
+    if (this._commands.indexOf(cmd) == -1) {
+      debug(`Vagrant command not found: ${cmd}`);
+      return;
     }
-  }
 
-  /**
-   *
-   * @param machineId
-   */
-  // TODO print this output in external window or console div
-  up(machineId) {
     const machine = this.getMachine(machineId);
+    this.emit('beforeVagrantCommand', { cmd: cmd, machineId: machineId });
 
     shell.cd(machine.directory);
-    shell.exec('vagrant up', function(code, stdout, stderr) {
-       console.log('Exit code:', code);
-       console.log('Program output:', stdout);
-       console.log('Program stderr:', stderr);
+    shell.exec(`vagrant ${cmd}`, (code, stdout, stderr) => {
+      this.emit('afterVagrantCommand', { cmd: cmd, machineId: machineId, code: code, stdout: stdout, stderr: stderr });
     });
   }
 
-  // TODO create rest of commands
+  up(machineId) {
+    this.exec('up', machineId);
+  }
+
+  suspend(machineId) {
+    this.exec('suspend', machineId);
+  }
+
+  halt(machineId) {
+    this.exec('halt', machineId);
+  }
+
+  provision(machineId) {
+    this.exec('provision', machineId);
+  }
+
+  ssh(machineId) {
+    this.exec('ssh', machineId);
+  }
+
+  destroy(machineId) {
+    this.exec('destroy', machineId);
+  }
 
   /**
    * Load vagrant machines generated

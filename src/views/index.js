@@ -7,7 +7,9 @@ import { Well, Table, Label } from 'react-bootstrap';
 import { ActionsButton, LoadingButton } from './react-components'
 const vagrant = remote.require('./vagrant');
 
-// Subscribe to vagrant event load machines
+/**
+ * Subscribe to vagrant event load machines
+ */
 vagrant.on('loadMachines', (items)=>{
   // Render each machine from list
   ReactDom.render(
@@ -39,6 +41,16 @@ vagrant.on('loadMachines', (items)=>{
     </Well>,
     document.getElementById('content'),
   );
-
-  console.log('items rendered');
 });
+
+vagrant.on('beforeVagrantCommand', (object)=>{
+  console.log('antes de ejecutar');
+})
+
+/**
+ * Reload table on command execute
+ */
+vagrant.on('afterVagrantCommand', (object)=>{
+  console.log(object);
+  vagrant.loadMachines();
+})
