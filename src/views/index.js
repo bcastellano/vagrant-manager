@@ -8,7 +8,7 @@ import { ActionsButton, LoadingButton } from './react-components'
 const vagrant = remote.require('./vagrant');
 
 // Subscribe to vagrant event load machines
-vagrant.on('load', (items)=>{
+vagrant.on('loadMachines', (items)=>{
   // Render each machine from list
   ReactDom.render(
     <Well bsSize="large">

@@ -131,7 +131,7 @@ class Vagrant extends EventEmitter {
         this._machines = items;
 
         // emit event with data loaded async
-        this.emit('load', items);
+        this.emit('loadMachines', items);
 
         resolve(items);
 

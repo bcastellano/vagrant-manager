@@ -142,8 +142,8 @@ class LoadingButton extends React.Component {
  * @type {{state: *}}
  */
 LoadingButton.propTypes = {
-  text: React.PropTypes.string,
-  textLoading: React.PropTypes.string,
+  text: React.PropTypes.any,
+  textLoading: React.PropTypes.any,
   onClick: React.PropTypes.func.isRequired
 }
 
