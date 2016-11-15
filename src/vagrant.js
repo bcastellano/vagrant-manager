@@ -24,7 +24,7 @@ class Vagrant extends EventEmitter {
      */
     this._machines = [];
 
-    // TODO Abrir ssh en terminal real. Pasar parametros de no confirmacion para destroy
+    // TODO Open ssh in terminal. Send params avoid confirmation for destroy
     this._commands = ['up', 'suspend', 'halt', /*'ssh', 'destroy',*/ 'provision'];
 
     this.loadMachines();
@@ -41,8 +41,9 @@ class Vagrant extends EventEmitter {
     const colors = {
       poweroff: 'default',
       stopped: 'danger',
+      aborted: 'warning',
       running: 'success',
-      saved: 'warning'
+      saved: 'info'
     };
 
     return colors[state];

@@ -17,7 +17,7 @@ class ActionsButton extends React.Component {
       up:         { name: 'up', icon: 'play' },
       destroy:    { name: 'destroy', icon: 'remove' },
       provision:  { name: 'provision', icon: 'cloud-download' },
-      ssh:        { name: 'ssh', icon: 'console' },
+      //ssh:        { name: 'ssh', icon: 'console' },
       suspend:    { name: 'suspend', icon: 'pause' },
       halt:       { name: 'halt', icon: 'stop' },
     }
@@ -37,6 +37,7 @@ class ActionsButton extends React.Component {
         break;
       case 'stopped':
       case 'poweroff':
+      case 'aborted':
       case 'saved':
       default:
         buttons.push(this._btn.up, this._btn.destroy, this._btn.provision);
