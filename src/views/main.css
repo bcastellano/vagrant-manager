@@ -1,3 +1,12 @@
 body {
-    background-color: #ff8839;
+    background: #0c5593 url(../../resources/background.png) top left no-repeat;
+}
+
+h1 {
+    color: #fff;
+    font-weight: lighter;
+}
+
+h1 small {
+    color: #ccc;
 }
