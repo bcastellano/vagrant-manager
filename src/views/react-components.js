@@ -33,7 +33,7 @@ class ActionsButton extends React.Component {
 
     switch (state) {
       case 'running':
-        buttons.push(this._btn.ssh, this._btn.suspend, this._btn.halt, this._btn.destroy, this._btn.provision);
+        buttons.push(this._btn.suspend, this._btn.halt, this._btn.destroy, this._btn.provision);
         break;
       case 'stopped':
       case 'poweroff':
