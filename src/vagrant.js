@@ -7,6 +7,11 @@ import shell from 'shelljs';
 
 /**
  * Vagrant class to get vagrant information
+ * 
+ * Events:
+ *  - loadMachines
+ *  - beforeVagrantCommand
+ *  - afterVagrantCommand
  */
 class Vagrant extends EventEmitter {
 
@@ -26,8 +31,6 @@ class Vagrant extends EventEmitter {
 
     // TODO Open ssh in terminal. Send params avoid confirmation for destroy
     this._commands = ['up', 'suspend', 'halt', /*'ssh', 'destroy',*/ 'provision'];
-
-    this.loadMachines();
   }
 
   /**
@@ -122,6 +125,11 @@ class Vagrant extends EventEmitter {
     return new Promise((resolve, reject)=>{
       const cmd = spawn('vagrant', args);
 
+      // error executing command
+      cmd.on('error', (err) => {
+        console.log('[ERROR]' + err);
+      });
+
       // get data from command
       cmd.stdout.on('data', (data) => {
         text = `${text}${data}`;
@@ -138,17 +146,24 @@ class Vagrant extends EventEmitter {
       cmd.on('close', (code) => {
         console.log(`child process exited with code ${code}`);
 
-        const items = this.processGlobalStatus(text);
+        if (code == 0) {
+          const items = this.processGlobalStatus(text);
 
-        // save list
-        this._machines = items;
+          // save list
+          this._machines = items;
 
-        // emit event with data loaded async
-        this.emit('loadMachines', items);
+          // emit event with data loaded async
+          this.emit('loadMachines', items);
 
-        resolve(items);
+          resolve(items);
 
-        debug(items);
+          debug(items);
+        } else {
+          
+          reject(code);
+
+          debug('Error executing command. Exist code: '+code);
+        }
       });
     });
   }

@@ -8,6 +8,14 @@ import { ActionsButton, LoadingButton } from './react-components'
 const vagrant = remote.require('./vagrant');
 
 /**
+ * Load initial machines
+ */
+vagrant.loadMachines()
+  .catch(function(){
+    alert('Vagrant executable not found')
+  });
+
+/**
  * Subscribe to vagrant event load machines
  */
 vagrant.on('loadMachines', (items)=>{
@@ -43,6 +51,9 @@ vagrant.on('loadMachines', (items)=>{
   );
 });
 
+/**
+ * 
+ */
 vagrant.on('beforeVagrantCommand', (object)=>{
   console.log('antes de ejecutar');
 })
