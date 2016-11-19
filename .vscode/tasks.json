@@ -1,0 +1,14 @@
+{
+    // Doc http://code.visualstudio.com/docs/editor/tasks
+    "version": "0.1.0",
+    "command": "npm",
+    "isShellCommand": true,
+    "showOutput": "always",
+    "suppressTaskName": true,
+    "tasks": [
+        {
+            "taskName": "compile",
+            "args": ["run", "compile"]
+        }
+    ]
+}
