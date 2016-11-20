@@ -9,7 +9,18 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
       "program": "${workspaceRoot}/app/main.js",
-      //"preLaunchTask": "compile",
+      "env": {
+        "DEBUG": "vagrant*"
+      }
+    },
+    {
+      "name": "Compile and Debug Main Process",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+      "program": "${workspaceRoot}/app/main.js",
+      "preLaunchTask": "compile",
       "env": {
         "DEBUG": "vagrant*"
       }

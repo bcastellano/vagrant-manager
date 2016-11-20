@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { SplitButton, MenuItem, Glyphicon, Button } from 'react-bootstrap';
-const vagrant = require('electron').remote.require('./vagrant');
+import vagrant from '../services/vagrant';
 
 /**
  * Actions for machine

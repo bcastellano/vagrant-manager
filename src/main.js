@@ -12,18 +12,15 @@ app.on('ready', ()=> {
     //app.dock.hide() //Hide the icon in osx dock
   }
 
-  const mainViewPath = path.join('file://', __dirname, '/views/main.html')
-
-  let win = new BrowserWindow({ width: 1300, height: 1000 })
+  let main_window = new BrowserWindow({ width: 1300, height: 1000 })
 
   // debug
-  win.setSize(1300,1000)
-  win.webContents.openDevTools()
-  win.show()
+  main_window.setSize(1300,1000)
+  main_window.webContents.openDevTools()
 
-  win.on('close', function () { win = null });
-  win.loadURL(mainViewPath);
-  win.show();
+  main_window.on('close', function () { main_window = null });
+  main_window.loadURL(`file://${__dirname}/main.html`);
+  main_window.show();
 
 });
 
