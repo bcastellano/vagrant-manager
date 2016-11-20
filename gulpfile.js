@@ -10,6 +10,7 @@ gulp.task(
     'compile-es6',
     'compile-html',
     'compile-css',
+    'compile-fonts',
   ]
 );
 
@@ -37,4 +38,11 @@ gulp.task('compile-css', () => {
   return gulp.
   src('src/**/*.css').
   pipe(gulp.dest('app'));
+});
+
+// compile fonts files (only move)
+gulp.task('compile-fonts', () => {
+  return gulp.
+  src('src/fonts/*').
+  pipe(gulp.dest('app/fonts'));
 });
