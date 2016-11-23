@@ -17,10 +17,14 @@ app.on('ready', ()=> {
   // debug
   main_window.setSize(1300,1000)
   main_window.webContents.openDevTools()
-
   main_window.on('close', function () { main_window = null });
-  main_window.loadURL(`file://${__dirname}/main.html`);
-  main_window.show();
+
+  // load configuration
+  let configuration = require('./services/configuration');
+  configuration.on('initialized', ()=>{
+    // show page when configuration has been loaded
+    main_window.loadURL(`file://${__dirname}/main.html`);
+  })
 
 });
 
