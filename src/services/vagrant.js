@@ -3,7 +3,7 @@
 const debug = require('debug')('vagrant-manager:vagrant');
 const EventEmitter = require('events');
 const spawn = require('child_process').spawn;
-const configuration = require('electron').remote.require('./services/configuration');
+const Configuration = require('electron').remote.require('./services/configuration');
 import shell from 'shelljs';
 
 /**
@@ -33,8 +33,16 @@ class Vagrant extends EventEmitter {
     // TODO Open ssh in terminal. Send params avoid confirmation for destroy
     this._commands = ['up', 'suspend', 'halt', /*'ssh', 'destroy',*/ 'provision'];
 
+    // load configuration
+    this.loadConfiguration();
+  }
+
+  /**
+   * Load data from configuration file
+   */
+  loadConfiguration() {
     // configure vagrant executable path
-    this._vagrantExecutable = configuration.get('vagrant_executable')
+    this._vagrantExecutable = Configuration.get('vagrant_executable')
   }
 
   /**

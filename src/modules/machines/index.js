@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Well, Table, Label } from 'react-bootstrap';
 import { ActionsButton, LoadingButton } from '../../components/react-components';
 import vagrant from '../../services/vagrant';
@@ -13,18 +13,14 @@ class Machines {
     }
 
     show() {
-
-        ReactDom.render(
-            <i>machines list</i>, 
-            document.getElementById('section-name')
-        )
-
         /**
          * Load initial machines
          */
         vagrant.loadMachines()
             .catch(function(){
-                alert('Vagrant executable not found')
+                if (confirm('Vagrant executable not found, ¿Do you want to configure it?')) {
+                    require('../settings').show()
+                }
             });
     }
 
@@ -33,8 +29,14 @@ class Machines {
          * Subscribe to vagrant event load machines
          */
         vagrant.on('loadMachines', (items)=>{
+            // Render section title
+            ReactDOM.render(
+                <i>machines list</i>, 
+                document.getElementById('section-name')
+            )
+
             // Render each machine from list
-            ReactDom.render(
+            ReactDOM.render(
                 <Well bsSize="large">
                 <LoadingButton onClick={()=>vagrant.loadMachines(true)} />
                 <Table responsive hover>

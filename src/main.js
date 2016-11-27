@@ -20,8 +20,8 @@ app.on('ready', ()=> {
   main_window.on('close', function () { main_window = null });
 
   // load configuration
-  let configuration = require('./services/configuration');
-  configuration.on('initialized', ()=>{
+  let Configuration = require('./services/configuration');
+  Configuration.on('initialized', ()=>{
     // show page when configuration has been loaded
     main_window.loadURL(`file://${__dirname}/main.html`);
   })
