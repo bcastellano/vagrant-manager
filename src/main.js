@@ -6,6 +6,9 @@ const {app,BrowserWindow} = require('electron');
 const path = require('path');
 const menu = require('./modules/menu')
 
+// execute fix path env on mac
+require('fix-path')();
+
 /**
  * Open main window
  */
