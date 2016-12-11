@@ -8,7 +8,10 @@
     "start": "node_modules/.bin/electron .",
     "start-dev": "npm run compile && DEBUG=vagrant* npm start",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node_modules/.bin/electron-packager ./ VagrantManager --icon=resources/icon.png --out build --ignore=\"(^/build$|^/src$|.idea|.gitignore|gulpfile.js)\""
+    "build": "npm run pack:linux && npm run pack:osx && npm run pack:win",
+    "pack:linux": "electron-packager ./ VagrantManager --icon=resources/icon.png --platform=linux --arch=x64 --overwrite --out=build --ignore=\"(^/build$|^/src$|.idea|.gitignore|gulpfile.js)\"",
+    "pack:osx": "electron-packager ./ VagrantManager --icon=resources/icon.png --platform=darwin --arch=x64 --overwrite --out=build --ignore=\"(^/build$|^/src$|.idea|.gitignore|gulpfile.js)\"",
+    "pack:win": "electron-packager ./ VagrantManager --icon=resources/icon.png --platform=win32 --arch=x64 --overwrite --out=build --ignore=\"(^/build$|^/src$|.idea|.gitignore|gulpfile.js)\""
   },
   "keywords": [
     "vagrant",
