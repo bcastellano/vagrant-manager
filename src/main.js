@@ -5,6 +5,7 @@ const debug = require('debug')('vagrant-manager:main');
 const {app,BrowserWindow} = require('electron');
 const path = require('path');
 const menu = require('./modules/menu')
+const AppTray = require('./services/tray')
 
 // execute fix path env on mac
 require('fix-path')();
@@ -39,6 +40,8 @@ app.on('ready', ()=> {
   Configuration.on('initialized', ()=>{
     // show page when configuration has been loaded
     openWindow();
+
+    AppTray.start()
   })
 
 });
