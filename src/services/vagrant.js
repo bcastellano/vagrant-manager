@@ -192,6 +192,8 @@ class Vagrant extends EventEmitter {
 
     // iterate each line to extract info
     const lines = text.split('\n');
+
+    itemsLoop:
     for (let i = 0; i < lines.length; i++) {
       // look for empty line to stop adding machine configurations
       if (lines[i].trim() == '') {
@@ -217,6 +219,12 @@ class Vagrant extends EventEmitter {
       if (i > 1) {
         const item = {};
         let start = 0;
+
+        // check fist element lenth of 7 chars (identifier for vagrant machine)
+        if (lines[i].substr(0, lines[i].indexOf(' ')).length != 7) {
+          break itemsLoop; // break loop by label
+        }
+
         Object.keys(cols).forEach((value) => {
           // add item col name with line respective data (get positional data)
           item[value] = lines[i].substr(start, cols[value].length).trim();
